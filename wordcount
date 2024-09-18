@@ -1,16 +1,19 @@
--- Load the input data
-data = LOAD 'input.txt' USING PigStorage(' ') AS (line:chararray);
-
--- Flatten the lines into words
-words = FOREACH data GENERATE FLATTEN(STRSPLIT(line, ' ')) AS word;
-
--- Group by words
-grouped = GROUP words BY word;
-
--- Count the occurrences of each word
-word_count = FOREACH grouped GENERATE 
-    group AS word, 
-    COUNT(words) AS count;
-
--- Store the output
-STORE word_count INTO 'output' USING PigStorage(','); 
+TOKENIZE Function.
+(TOKENIZE(line));
+(or)
+If we have any delimiter like space, we can specify as
+(TOKENIZE(line,' '));
+Output will be like this:
+({(This),(is),(a),(hadoop),(class)})
+({(hadoop),(is),(a),(bigdata),(technology)})
+but we have to convert it into multiple rows like below
+(This)
+(is)
+(a)
+(hadoop)
+(class)
+(hadoop)
+(is)
+(a)
+(bigdata)
+(technology)
