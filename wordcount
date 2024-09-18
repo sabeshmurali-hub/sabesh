@@ -1,0 +1,16 @@
+-- Load the input data
+data = LOAD 'input.txt' USING PigStorage(' ') AS (line:chararray);
+
+-- Flatten the lines into words
+words = FOREACH data GENERATE FLATTEN(STRSPLIT(line, ' ')) AS word;
+
+-- Group by words
+grouped = GROUP words BY word;
+
+-- Count the occurrences of each word
+word_count = FOREACH grouped GENERATE 
+    group AS word, 
+    COUNT(words) AS count;
+
+-- Store the output
+STORE word_count INTO 'output' USING PigStorage(','); 
